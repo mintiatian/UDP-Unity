@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 
 namespace UdpNetwork
 {
@@ -9,11 +10,15 @@ namespace UdpNetwork
         public string nickName;
         public int networkId;
 
+        public List<byte[]> syncDatas;
+
         public void SetData(IPAddress address, int port, string nickName)
         {
             this.address = address;
             this.port = port;
             this.nickName = nickName;
+
+            syncDatas = new List<byte[]>();
         }
 
         public void SetNetworkId(int networkId)
