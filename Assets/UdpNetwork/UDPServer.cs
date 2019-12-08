@@ -34,7 +34,16 @@ namespace UdpNetwork
                     break;
 
                 case Message.IdCreateNetworkObject:
+                    sender.syncDatas.Add(rcvBytes);
                     SendClient(rcvBytes);
+                    {
+                        var haveDataClients = clients.Where(client => client.syncDatas.Count != 0);
+                        foreach (var client in haveDataClients)
+                        {
+                            Send(sender, client.syncDatas[0]);
+                        }
+                    }
+
                     break;
                 default:
                     //データを文字列に変換する
