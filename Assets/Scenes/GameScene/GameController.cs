@@ -1,14 +1,20 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
 
-    public GameObject networkGameObject;
+    //public GameObject networkGameObject;
+    public Dropdown settingIp;
 
     // Start is called before the first frame update
-    void Start()
+    public void Create()
     {
-        Instantiate(networkGameObject, new Vector3(0.0f, 2.0f, 0.0f), Quaternion.identity);
+
+        UdpClientBehaviour.MyUsePort += settingIp.value;
+
+        Debug.Log("MyUsePort:" + UdpClientBehaviour.MyUsePort);
+        UdpClientBehaviour.CreateNetworkGameObject(true, new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), Random.Range(-5, 5)));
     }
 
     // Update is called once per frame

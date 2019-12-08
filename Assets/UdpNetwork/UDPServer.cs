@@ -18,7 +18,7 @@ namespace UdpNetwork
         {
             base.RecieveData(address, port, rcvBytes);
 
-            Debug.Log("RecieveData()");
+            Debug.Log("RecieveData(): id = " + rcvBytes[0]);
 
             ClientStatus sender = null;
             if (rcvBytes[0] != Message.IdSessionStart)
@@ -31,6 +31,10 @@ namespace UdpNetwork
             {
                 case Message.IdSessionStart:
                     RecieveSessionStartClient(address, port, rcvBytes);
+                    break;
+
+                case Message.IdCreateNetworkObject:
+                    SendClient(rcvBytes);
                     break;
                 default:
                     //データを文字列に変換する
@@ -98,6 +102,14 @@ namespace UdpNetwork
                 }
 
                 Send(client, memory.ToArray());
+            }
+        }
+
+        private void SendClient(byte[] sendBytes)
+        {
+            foreach (var client in clients)
+            {
+                Send(client, sendBytes);
             }
         }
 
