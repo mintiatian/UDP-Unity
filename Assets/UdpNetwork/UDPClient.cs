@@ -1,6 +1,6 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Net;
+using UnityEngine;
 
 namespace UdpNetwork
 {
@@ -28,8 +28,8 @@ namespace UdpNetwork
             status.port = sendPort;
             status.nickName = name;
 
-            Console.WriteLine("MyPort:" + myPort);
-            Console.WriteLine("ServerPort:" + sendPort);
+            Debug.Log("MyPort:" + myPort);
+            Debug.Log("ServerPort:" + sendPort);
 
             SendSessionStart(surverStatus, status);
         }
@@ -41,10 +41,10 @@ namespace UdpNetwork
 
         public void Test002()
         {
-            Console.WriteLine("address:" + status.address);
-            Console.WriteLine("port:" + status.port);
-            Console.WriteLine("nickName:" + status.nickName);
-            Console.WriteLine("networkId:" + status.networkId);
+            Debug.Log("address:" + status.address);
+            Debug.Log("port:" + status.port);
+            Debug.Log("nickName:" + status.nickName);
+            Debug.Log("networkId:" + status.networkId);
         }
 
         private void SendSessionStart(ClientStatus sendServer, ClientStatus clientStatus)
@@ -63,6 +63,11 @@ namespace UdpNetwork
             }
         }
 
+        public void Send(string sendText)
+        {
+            byte[] sendBytes = System.Text.Encoding.UTF8.GetBytes(sendText);
+            Send(surverStatus, sendBytes);
+        }
 
         public void Send(byte[] sendBytes)
         {
@@ -80,18 +85,19 @@ namespace UdpNetwork
                 {
                     byte id = binaryStream.ReadByte();
                     int networkId = binaryStream.ReadInt32();
-                    Console.WriteLine("networkId:" + networkId);
+                    Debug.Log("networkId:" + networkId);
 
                     status.networkId = networkId;
                 }
             }
         }
 
+
+        public delegate void ReceiveCreateNetworkObject(IPAddress address, int port, byte[] rcvBytes);
+        public ReceiveCreateNetworkObject CreateNetworkObject;
+
         protected override void RecieveData(IPAddress address, int port, byte[] rcvBytes)
         {
-
-
-
             base.RecieveData(address, port, rcvBytes);
 
 
@@ -104,6 +110,9 @@ namespace UdpNetwork
                 case Message.IdGetNetworkId:
                     ReceiveNetworkId(address, port, rcvBytes);
                     break;
+                case Message.IdCreateNetworkObject:
+                    CreateNetworkObject(address, port, rcvBytes);
+                    break;
                 default:
                     //データを文字列に変換する
 
@@ -114,7 +123,7 @@ namespace UdpNetwork
                     //受信したデータと送信者の情報をRichTextBoxに表示する
                     string displayMsg = string.Format("[{0} ({1})] > {2}", address, port, rcvMsg);
                     //RichTextBox1.BeginInvoke(new Action<string>(ShowReceivedString), displayMsg);
-                    Console.WriteLine(displayMsg);
+                    Debug.Log(displayMsg);
 
                     break;
             }

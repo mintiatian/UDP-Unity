@@ -1,0 +1,15 @@
+{
+    "name": "GameScene",
+    "references": [
+        "GUID:e3552a165c051754aa4f26fd3c305a7a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
